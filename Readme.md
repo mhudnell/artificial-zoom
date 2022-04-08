@@ -28,6 +28,11 @@ optional arguments:
                         If true, draws a crosshair at the center of expansion. (default: False)
 ```
 
+## Requirements
+
+- Tested in Python 3.9.10
+- `pip install -r requirements.txt`
+
 ## Examples
 
 ```commandline
