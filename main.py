@@ -84,7 +84,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create an artificial zoom video from a single image. Output is .mp4 format.')
     parser.add_argument('image_file', type=str, help='The image to use.')
     parser.add_argument('output_size', type=resolution, help='The resolution of the generated output video.')
-    parser.add_argument('--coe', type=point, required=True, help='Center of expansion (e.g. `--coe=978.76x486.45`). Use --offset if you want this to be interpreted as an offset from the physical center.')
+    parser.add_argument('--coe', type=point, required=True, help='The center of expansion at the original video resolution. Use --offset if you want this to be interpreted as an offset from the physical center. (e.g. `--coe=978.76x486.45`, `--coe=-10.74x5.89 --offset`)')
     parser.add_argument('--fps', type=float, default=30.0, help='Frames per second of generated output video.')
     parser.add_argument('--zoom-factor', type=float, default=6.0, help='The amount to zoom in.')
     parser.add_argument('--zoom-length', type=float, default=5.0,
@@ -110,10 +110,18 @@ if __name__ == '__main__':
 
     # determine the center of expansion
     coe = args.coe
+    original_resolution = np.flip(np.array(full_res_image.shape[:2]))  # [width, height]
+
     if args.offset:  # use offset from physical center
-        original_resolution = np.flip(np.array(full_res_image.shape[:2]))  # [width, height]
         physical_center = np.array([original_resolution[0] / 2, original_resolution[1] / 2])
         coe = physical_center + coe
+
+    scale_factors = args.output_size / original_resolution
+    coe_scaled = coe * scale_factors
+    print(f'Using center of expansion: \n' \
+          f'    - full resolution: ({coe[0]:.2f}, {coe[1]:.2f})\n' \
+          f'    - output resolution: ({coe_scaled[0]:.2f}, {coe_scaled[1]:.2f})'
+    )
 
     create_artificial_zoom_video(full_res_image, output_filename, args.output_size, coe, args.zoom_factor,
                                  args.zoom_length, args.zoom_out, args.fps, args.draw_center)

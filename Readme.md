@@ -41,5 +41,6 @@ python main.py test_images/city.jpg 640x360 --coe=1909.26x1085.89 --zoom-factor=
 
 # describe the artificial center as an offset from the physical center
 python main.py test_images/city.jpg 640x360 --coe=-10.74x5.89 --offset --zoom-factor=7.0 --zoom-length=5.5
+python main.py test_images/city.jpg 1280x720 --coe=76.8x-43.2 --offset --zoom-factor=7.0 --zoom-length=5.5
 python main.py test_images/city.jpg 640x360 --coe=-800.74x500.89 --offset --zoom-factor=7.0 --zoom-length=5.5 --draw-center
 ```
